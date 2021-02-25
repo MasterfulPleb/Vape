@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
+    <link rel="stylesheet" href="./styles/index.css"/>
+</head>
+<body>
+    <h1 class="header-class">Hello World!</h1>
+    <h1 class="header-class">Hello World!</h1>
+    <p id="main-paragraph">
+        We are using node <script>document.write(process.versions.node)</script>,
+        Chrome <script>document.write(process.versions.chrome)</script>,
+        and Electron <script>document.write(process.versions.electron)</script>.
+    </p>
+    <script>let $ = require('jquery');</script>
+    <script src="./scripts/index.js"></script>
+</body>
+</html>
