@@ -1,13 +1,37 @@
 body {
-    background-color:cadetblue;
+    background-color: black;
+    margin: 0;
+    padding: 0;
 }
 
-h1 {
-    background-color:chocolate;
+#menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgb(5, 124, 1);
 }
 
-#main-paragraph, .header-class {
-    color:darkred;
+#menu li {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 10px 15px;
+    cursor: default
 }
 
-/*this is a comment*/
+#menu li:hover {
+    background-color: rgb(2, 70, 0);
+    color: rgb(207, 207, 207);
+}
+
+div {
+    border: 1px solid red;
+    color: white;
+}
+
+#recipes {display: none}
+#flavors {display: none}
+#batchHistory {display: none}
