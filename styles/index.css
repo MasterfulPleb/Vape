@@ -61,7 +61,7 @@ body {
 #calcMix {
     float: left;
     width: 50%;
-    height: 100%;;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -69,6 +69,7 @@ body {
     float: left;
     width: 50%;
     height: 100%;
+    overflow: hidden;
 }
 
 #calcComments {
@@ -83,17 +84,12 @@ body {
     float: left;
     width: 50%;
     height: 100%;
-    background-color: blue;
 }
 
 #calcResult {
     background-color: orange;
 }
-/*
-#calcMixT, #calcBaseT {
-    border: 2px solid red;
-}
-*/
+
 table {
     width: 50%;
     margin-left: auto;
@@ -112,3 +108,32 @@ td {
     text-align: right;
 }
 
+
+
+.calcNewFlavor {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0px;
+}
+
+.calcNewFlavorName {
+    float: left;
+    width: 50%;
+}
+
+.calcNewFlavorP {
+    float: left;
+    width: 28px;
+    margin-left: 10px;
+    margin-right: 3px;
+}
+
+h4 {
+    text-align: center;
+}
+
+.calcNewFlavorSign {
+    float: left;
+    margin-top: 0px;
+}
