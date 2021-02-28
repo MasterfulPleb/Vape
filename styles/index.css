@@ -1,5 +1,6 @@
 body {
-    background-color: white;
+    background-color: rgb(41, 41, 41);
+    color: white;
     margin: 0;
     padding: 0;
 }
@@ -60,15 +61,14 @@ body {
 #calcMix {
     float: left;
     width: 50%;
-    height: 100%;
-    background-color: darkmagenta;
+    height: 100%;;
+    overflow: hidden;
 }
 
 #calcBase {
     float: left;
     width: 50%;
     height: 100%;
-    background-color: hotpink;
 }
 
 #calcComments {
@@ -89,3 +89,26 @@ body {
 #calcResult {
     background-color: orange;
 }
+/*
+#calcMixT, #calcBaseT {
+    border: 2px solid red;
+}
+*/
+table {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td {
+    padding-top: 20px;
+}
+
+.input {
+    width: 50px;
+}
+
+.inputDescription {
+    text-align: right;
+}
+
