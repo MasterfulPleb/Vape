@@ -38,3 +38,9 @@ function addFlavor() {
     newFlavor.appendChild(newP)
     document.getElementById("calcFlavors").appendChild(newFlavor)
 }
+
+function removeFlavor () {
+    var removeFlavor = document.getElementById("calcNewFlavor" + flavorCount)
+    removeFlavor.parentNode.removeChild(removeFlavor)
+    flavorCount--
+}

@@ -1,11 +1,31 @@
 body {
     background-color: rgb(41, 41, 41);
     color: white;
+    font-family: Arial;
+    font-size: larger;
     margin: 0;
     padding: 0;
 }
+#views {
+    overflow: auto
+}
+input {
+    font-size: large;
+    color: inherit;
+    background-color: inherit;
+}
+textarea {
+    resize: none;
+    font-family: Arial;
+    font-size: large;
+}
+button {
+    font-size: medium;
+    background-color: inherit;
+    color: inherit;
+    border: 2px outset;
+}
 
-#views {overflow: auto}
 
 /*Menu Layout*/
 
@@ -16,9 +36,8 @@ body {
     overflow: hidden;
     background-color: rgb(5, 124, 1);
 }
-
 #menu li {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial;
     font-size: large;
     display: inline-block;
     color: white;
@@ -26,15 +45,19 @@ body {
     padding: 10px 15px;
     cursor: default
 }
-
 #menu li:hover {
     background-color: rgb(2, 70, 0);
     color: rgb(207, 207, 207);
 }
-
-#recipes {display: none}
-#flavors {display: none}
-#batchHistory {display: none}
+#recipes {
+    display: none
+}
+#flavors {
+    display: none
+}
+#batchHistory {
+    display: none
+}
 
 
 /*Calculator Layout*/
@@ -42,98 +65,99 @@ body {
 #calcTop {
     height: 600px;
 }
-
 #calcLeft {
     position: relative;
     float: left;
     width: 50%;
     height: 100%;
 }
-
 #calcTopLeft {
     width: 100%;
     height: 50%;
 }
-
 #calcMix {
     float: left;
     width: 50%;
     height: 100%;
     overflow: hidden;
 }
-
 #calcBase {
     float: right;
     width: 50%;
     height: 100%;
     overflow: hidden;
 }
-
 #calcComments {
     position: absolute;
     height: 50%;
     width: 100%;
-    background-color: crimson;
+    /* background-color: crimson; */
 }
-
 #calcFlavors {
+    position: relative;
     float: right;
     width: 50%;
     height: 100%;
-    overflow: auto;
+    overflow-x: hidden;
 }
-
 #calcResult {
     background-color: orange;
 }
-
 table {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 21px;
+    margin-top: 40px;
 }
-
 td {
     padding-top: 20px;
 }
-
 .input {
     width: 50px;
 }
-
 .inputDescription {
     text-align: right;
 }
-
 .calcNewFlavor {
     width: fit-content;
     margin-left: auto;
     margin-right: auto;
-    height: 35px;
+    height: 45px;
 }
-
 .calcNewFlavorName {
     float: left;
     width: 200px;
 }
-
 .calcNewFlavorP {
     float: left;
-    width: 28px;
+    width: 40px;
     margin-left: 12px;
     margin-right: 5px;
 }
-
 h4 {
     text-align: center;
+    margin: 43px 0px 23px;
 }
-
 .calcNewFlavorSign {
     float: left;
-    margin: 0px;
+    margin: 3px 0px;
 }
 
 /*delete this when <pre> is no longer in results*/
 pre {
     margin: 0px;
+}
+
+#calcCommentsBox {
+    margin: 35px 0px 0px 10px;
+    width: 95%;
+    height: 80%;
+    color: inherit;
+    background-color: inherit;
+}
+#calcChangeFlavors {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    margin-left: 10px;
+    margin-top: 10px;
 }

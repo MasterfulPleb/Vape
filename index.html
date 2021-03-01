@@ -71,11 +71,14 @@
                         </div>
                     </div>
                     <div id="calcComments">
-                        <p>comments</p>
-                        <button onclick="addFlavor()">Add flavor</button>
+                        <textarea id="calcCommentsBox" placeholder="Comments"></textarea>
                     </div>
                 </div>
                 <div id="calcFlavors">
+                    <div id="calcChangeFlavors">
+                        <button id="calcAddFlavor" onclick="addFlavor()">Add flavor</button>
+                        <button id="calcRemoveFlavor" onclick="removeFlavor()">Remove flavor</button>
+                    </div>
                     <h4>Flavors</h4>
                     <div class="calcNewFlavor" id="calcNewFlavor0">
                         <input class="calcNewFlavorName" id="f0" type="text" placeholder="Flavor 0">
@@ -85,7 +88,8 @@
                 </div>
             </div>
             <div id="calcResult">
-                <pre>comments
+                <pre>
+                    results
                     adf
                     asdf
                     asdfasdf
