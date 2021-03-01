@@ -40,22 +40,19 @@ body {
 /*Calculator Layout*/
 
 #calcTop {
-    position: relative;
-    height: 400px;
+    height: 600px;
 }
 
 #calcLeft {
     position: relative;
     float: left;
-    left: 0px;
     width: 50%;
     height: 100%;
 }
 
 #calcTopLeft {
-    position: absolute;
     width: 100%;
-    height: 66%;
+    height: 50%;
 }
 
 #calcMix {
@@ -66,7 +63,7 @@ body {
 }
 
 #calcBase {
-    float: left;
+    float: right;
     width: 50%;
     height: 100%;
     overflow: hidden;
@@ -74,16 +71,16 @@ body {
 
 #calcComments {
     position: absolute;
-    bottom: 0px;
-    height: 34%;
+    height: 50%;
     width: 100%;
     background-color: crimson;
 }
 
 #calcFlavors {
-    float: left;
+    float: right;
     width: 50%;
     height: 100%;
+    overflow: auto;
 }
 
 #calcResult {
@@ -91,9 +88,9 @@ body {
 }
 
 table {
-    width: 50%;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 21px;
 }
 
 td {
@@ -108,25 +105,23 @@ td {
     text-align: right;
 }
 
-
-
 .calcNewFlavor {
-    width: 50%;
+    width: fit-content;
     margin-left: auto;
     margin-right: auto;
-    padding: 0px;
+    height: 35px;
 }
 
 .calcNewFlavorName {
     float: left;
-    width: 50%;
+    width: 200px;
 }
 
 .calcNewFlavorP {
     float: left;
     width: 28px;
-    margin-left: 10px;
-    margin-right: 3px;
+    margin-left: 12px;
+    margin-right: 5px;
 }
 
 h4 {
@@ -135,5 +130,10 @@ h4 {
 
 .calcNewFlavorSign {
     float: left;
-    margin-top: 0px;
+    margin: 0px;
+}
+
+/*delete this when <pre> is no longer in results*/
+pre {
+    margin: 0px;
 }

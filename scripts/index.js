@@ -13,28 +13,28 @@ function switchView(viewsId) {
     }
 }
 
-var fc = 0
+var flavorCount = 0
 
 function addFlavor() {
-    fc += 1
+    flavorCount++
     var newFlavor = document.createElement("div")
-    var newInput = document.createElement("input")
-    var newFlavorPI = document.createElement("input")
-    var newP = document.createElement("p")
     newFlavor.className = "calcNewFlavor"
-    newFlavor.id = "calcNewFlavor" + fc
-    document.getElementById("calcFlavors").appendChild(newFlavor)
+    newFlavor.id = "calcNewFlavor" + flavorCount
+    var newInput = document.createElement("input")
     newInput.className = "calcNewFlavorName"
-    newInput.id = "f" + fc
+    newInput.id = "f" + flavorCount
     newInput.type = "text"
-    newInput.placeholder = "Flavor " + fc
-    document.getElementById(newFlavor.id).appendChild(newInput)
-    newFlavorPI.className = "calcNewFlavorP"
-    newFlavorPI.id = "fp" + fc
-    newFlavorPI.type = "text"
-    document.getElementById(newFlavor.id).appendChild(newFlavorPI)
+    newInput.placeholder = "Flavor " + flavorCount
+    var newFlavorPercentInput = document.createElement("input")
+    newFlavorPercentInput.className = "calcNewFlavorP"
+    newFlavorPercentInput.id = "fp" + flavorCount
+    newFlavorPercentInput.type = "text"
+    var newP = document.createElement("p")
     newP.className = "calcNewFlavorSign"
-    newP.id = "calcNewFlavorPP" + fc
-    document.getElementById(newFlavor.id).appendChild(newP)
-    document.getElementById(newP.id).innerText = "%"
+    newP.id = "calcNewFlavorPP" + flavorCount
+    newP.innerText = "%"
+    newFlavor.appendChild(newInput)
+    newFlavor.appendChild(newFlavorPercentInput)
+    newFlavor.appendChild(newP)
+    document.getElementById("calcFlavors").appendChild(newFlavor)
 }
