@@ -16,7 +16,7 @@ input {
 }
 textarea {
     resize: none;
-    font-family: Arial;
+    font-family: inherit;
     font-size: large;
 }
 button {
@@ -100,9 +100,6 @@ button {
     height: 100%;
     overflow-x: hidden;
 }
-#calcResult {
-    background-color: orange;
-}
 table {
     margin-left: auto;
     margin-right: auto;
@@ -141,12 +138,6 @@ h4 {
     float: left;
     margin: 3px 0px;
 }
-
-/*delete this when <pre> is no longer in results*/
-pre {
-    margin: 0px;
-}
-
 #calcCommentsBox {
     margin: 35px 0px 0px 10px;
     width: 95%;
@@ -160,4 +151,45 @@ pre {
     width: 100%;
     margin-left: 10px;
     margin-top: 10px;
+}
+#calcResult {
+    
+width: 75%;
+    
+margin-left: auto;
+    
+margin-right: auto;
+    
+border: 4px ridge rgb(177 177 177);
+}
+.calcResultRow {
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    height: 22px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+p {
+    margin: 0px;
+}
+#calcResultRowSpacer {
+    height: 15px;
+}
+.calcResultFlavor {
+    float:left;
+    width: 500px;
+    height: 100%;
+}
+.calcResultVolume {
+    float:left;
+}
+.calcResultMass {
+    float:left;
+    width: 60px;
+    text-align: center;
+    margin: 0px 50px;
+}
+.calcResultPercent {
+    float:left;
 }
