@@ -2,127 +2,116 @@ console.log("Vape Shit 0.1.0 initiated")
 
 
 //  view switching
-var views = []
-let viewElements = document.getElementById("views").children;
-for (let i = 0; i < viewElements.length; i++) {
-    views.push(viewElements[i].id)
-}
+let views = Array.from(document.getElementById("views").children)
 function switchView(viewsId) {
-    for (let i = 0; i < views.length; i++) {
-        document.getElementById(views[i]).style.display = viewsId == views[i] ? "block" : "none"
-    }
+    views.forEach(view => view.style.display = viewsId == view.id ? "block" : "none")
 }
-console.log(views)
-//  calculator functions
 
-//  add/remove flavor
-var calcFlavorCount = 0
-var calcFlavorNames = ["calcFlavor0"]
-var calcResultFlavorNames = ["calcResultFlavorName0"]
+
+//  calculator functionality
+
+let calcFlavorCount = 0
+/** @type {Array<HTMLElement>} */
+let calcFlavorList = []
+/** @type {Array<HTMLElement>} */
+let calcResultFlavorList = []
 function addFlavor() {
     calcFlavorCount++
 
     //  add flavor 
-    var newFlavor = document.createElement("div")
-    newFlavor.className = "calcNewFlavor"
+    let newFlavor = document.getElementById("calcFlavors").appendChild(document.createElement("div"))
     newFlavor.id = "calcNewFlavor" + calcFlavorCount
-    var newInput = document.createElement("input")
-    newInput.className = "calcNewFlavorName"
+    newFlavor.className = "calcNewFlavor"
+    let newInput = newFlavor.appendChild(document.createElement("input"))
     newInput.id = "calcFlavor" + calcFlavorCount
+    newInput.className = "calcNewFlavorName"
     newInput.type = "text"
     newInput.placeholder = "Flavor " + calcFlavorCount
-    var newFlavorPercentInput = document.createElement("input")
-    newFlavorPercentInput.className = "calcNewFlavorP"
-    newFlavorPercentInput.id = "calcFlavorPercent" + calcFlavorCount
-    newFlavorPercentInput.type = "text"
-    var newP = document.createElement("p")
+    let newPercentInput = newFlavor.appendChild(document.createElement("input"))
+    newPercentInput.id = "calcFlavorPercent" + calcFlavorCount
+    newPercentInput.className = "calcNewFlavorP"
+    newPercentInput.type = "number"
+    newPercentInput.step = ".1"
+    newPercentInput.min = "0"
+    newPercentInput.max = "100"
+    let newP = newFlavor.appendChild(document.createElement("p"))
     newP.className = "calcNewFlavorSign"
     newP.innerText = "%"
-    newFlavor.appendChild(newInput)
-    newFlavor.appendChild(newFlavorPercentInput)
-    newFlavor.appendChild(newP)
-    document.getElementById("calcFlavors").appendChild(newFlavor)
-
+    
     //  add result flavor
-    var resultsNewFlavor = document.createElement("div")
-    resultsNewFlavor.className = "calcResultRow"
+    let resultsNewFlavor = document.getElementById("calcResult").appendChild(document.createElement("div"))
     resultsNewFlavor.id = "calcResultFlavor" + calcFlavorCount
-    var resultsNewP1 = document.createElement("p")
-    resultsNewP1.className = "calcResultFlavor"
-    resultsNewP1.id = "calcResultFlavorName" + calcFlavorCount
-    resultsNewP1.innerText = "Flavor " + calcFlavorCount
-    var resultsNewP2 = document.createElement("p")
-    resultsNewP2.className = "calcResultVolume"
-    resultsNewP2.id = "calcResultFlavorVolume" + calcFlavorCount
-    resultsNewP2.innerText = 0
-    var resultsNewP3 = document.createElement("p")
-    resultsNewP3.className = "calcResultMass"
-    resultsNewP3.id = "calcResultFlavorMass" + calcFlavorCount
-    resultsNewP3.innerText = 0
-    var resultsNewP4 = document.createElement("p")
-    resultsNewP4.className = "calcResultPercent"
-    resultsNewP4.id = "calcResultFlavorPercent" + calcFlavorCount
-    resultsNewP4.innerText = 0
-    resultsNewFlavor.appendChild(resultsNewP1)
-    resultsNewFlavor.appendChild(resultsNewP2)
-    resultsNewFlavor.appendChild(resultsNewP3)
-    resultsNewFlavor.appendChild(resultsNewP4)
-    document.getElementById("calcResult").appendChild(resultsNewFlavor)
+    resultsNewFlavor.className = "calcResultRow"
+    let resultsFlavorName = resultsNewFlavor.appendChild(document.createElement("p"))
+    resultsFlavorName.id = "calcResultFlavorName" + calcFlavorCount
+    resultsFlavorName.className = "calcResultFlavor"
+    resultsFlavorName.innerText = "Flavor " + calcFlavorCount
+    let resultsVolume = resultsNewFlavor.appendChild(document.createElement("p"))
+    resultsVolume.id = "calcResultFlavorVolume" + calcFlavorCount
+    resultsVolume.className = "calcResultVolume"
+    resultsVolume.innerText = 0
+    let resultsMass = resultsNewFlavor.appendChild(document.createElement("p"))
+    resultsMass.id = "calcResultFlavorMass" + calcFlavorCount
+    resultsMass.className = "calcResultMass"
+    resultsMass.innerText = 0
+    let resultsPercent = resultsNewFlavor.appendChild(document.createElement("p"))
+    resultsPercent.id = "calcResultFlavorPercent" + calcFlavorCount
+    resultsPercent.className = "calcResultPercent"
+    resultsPercent.innerText = 0
 
-    //  result flavor name auto-update
-    let calcCurrentFlavor = document.getElementById(newInput.id)
-    calcFlavorNames.push(calcCurrentFlavor.id)
-    let calcCurrentResultFlavor = document.getElementById(resultsNewP1.id)
-    calcResultFlavorNames.push(calcCurrentResultFlavor.id)
+    //  add event listener for flavor name/%
+    newInput.onchange = () => {
+        if (newInput.value == "") {
+            resultsFlavorName.innerHTML = "Flavor " + i
+        } else {
+            resultsFlavorName.innerHTML = newInput.value
+        }
+    }
+    newPercentInput.onchange = () => {
+        if (newPercentInput.value == "") {
+            resultsPercent.innerHTML = "0"
+        } else {
+            resultsPercent.innerHTML = newPercentInput.value
+        }
+    }
+
+    //  add flavor to array
+    calcFlavorList.push(newFlavor)
+    calcResultFlavorList.push(resultsNewFlavor)
 }
-function removeFlavor () {
+function removeFlavor() {
     //  remove flavor
-    var removeFlavor = document.getElementById("calcNewFlavor" + calcFlavorCount)
+    let removeFlavor = document.getElementById("calcNewFlavor" + calcFlavorCount)
     removeFlavor.parentNode.removeChild(removeFlavor)
 
     //  remove result flavor
-    var resultsRemoveFlavor = document.getElementById("calcResultFlavor" + calcFlavorCount)
-    resultsRemoveFlavor.parentNode.removeChild(resultsRemoveFlavor)
+    let removeResultFlavor = document.getElementById("calcResultFlavor" + calcFlavorCount)
+    removeResultFlavor.parentNode.removeChild(removeResultFlavor)
 
-    // remove flavor from array
-    calcFlavorNames.length = calcFlavorCount
-    calcResultFlavorNames.length = calcFlavorCount
+    //  increment flavor count
     calcFlavorCount--
+
+    //  remove flavor from array
+    calcFlavorList.length = calcFlavorCount
+    calcResultFlavorList.length = calcFlavorCount
 }
 addFlavor()
 
-const calcTop = document.getElementById("calcTop")
-const calcFlavors = document.getElementById("calcFlavors")
+const calcAmmount = document.getElementById("calcAmmount")
+const calcStrength = document.getElementById("calcStrength")
 const calcPG = document.getElementById("calcPG")
 const calcVG = document.getElementById("calcVG")
+const calcBaseStrength = document.getElementById("calcBaseStrength")
 const calcBasePG = document.getElementById("calcBasePG")
 const calcBaseVG = document.getElementById("calcBaseVG")
 
-calcPG.addEventListener("change", () => {
-    calcVG.value = "100" - calcPG.value 
-})
-calcVG.addEventListener("change", () => {
-    calcPG.value = "100" - calcVG.value 
-})
-calcBasePG.addEventListener("change", () => {
-    calcBaseVG.value = "100" - calcBasePG.value
-})
-calcBaseVG.addEventListener("change", () => {
-    calcBasePG.value = "100" - calcBaseVG.value
-})
-calcFlavors.addEventListener("change", () => {
-    for (let i = 1; i < calcFlavorCount + 1; i++) {
-        let flavor = document.getElementById(calcFlavorNames[i]).value
-        if (flavor == "") {
-            document.getElementById(calcResultFlavorNames[i]).innerHTML = "Flavor " + i
-        } else {
-            document.getElementById(calcResultFlavorNames[i]).innerHTML = flavor
-        }
-    }
-})
-calcTop.addEventListener("change", () => {
-    document.getElementById("calcResultBaseVolume").innerText = "7"
-})
+calcPG.onchange = () => calcVG.value = "100" - calcPG.value
+calcVG.onchange = () => calcPG.value = "100" - calcVG.value
+calcBasePG.onchange = () => calcBaseVG.value = "100" - calcBasePG.value
+calcBaseVG.onchange = () => calcBasePG.value = "100" - calcBaseVG.value
+document.getElementById("calcFlavors").onchange = updateCalc
+document.getElementById("calcTopLeft").onchange = updateCalc
 
-/* when flavor added have it add the event listener, when removed, remove it. 
-reference individual flavor update function*/
+function updateCalc() {
+    document.getElementById("calcResultBaseVolume").innerText = "7"
+}
