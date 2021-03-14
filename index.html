@@ -2,126 +2,35 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Vape Shit 0.2.0</title>
+    <title>Vape Shit 0.1.0</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
     <link rel="stylesheet" href="./styles/index.css"/>
 </head>
 <body>
-    <!--Menu is here-->
     <ul id="menu">
-        <li onclick="switchView('calc')">Calculator</li>
-        <li onclick="switchView('recipes')">Recipes</li>
-        <li onclick="switchView('flavors')">Flavors</li>
-        <li onclick="switchView('batchHistory')">Batch History</li>
+        <li onclick="showCalculator()">Calculator</li>
+        <li onclick="showRecipes()">Recipes</li>
+        <li onclick="showFlavors()">Flavors</li>
+        <li onclick="showBatchHistory()">Batch History</li>
     </ul>
-    <div id="views">
-        <!--calculator is here-->
-        <div id="calc">
-            <div id="calcTop">
-                <div id="calcLeft">
-                    <div id="calcTopLeft">
-                        <div id="calcMix">
-                            <table id="calcMixT">
-                                <tr>
-                                    <th colspan="3">Mix</th>
-                                </tr>
-                                <tr>
-                                    <td class="inputDescription">Ammount</td>
-                                    <td><input class="input" id="calcAmmount" type="number" step="10" min="0"></td>
-                                    <td>ml</td>
-                                </tr>
-                                <tr>
-                                    <td class="inputDescription">Strength</td>
-                                    <td><input class="input" id="calcStrength" type="number" step=".5" min="0"></td>
-                                    <td>mg/ml</td>
-                                </tr>
-                                <tr>
-                                    <td class="inputDescription">PG</td>
-                                    <td><input class="input" id="calcPG" type="number" step="1" min="0" max="100"></td>
-                                    <td>%</td>
-                                </tr>
-                                <tr>
-                                    <td class="inputDescription">VG</td>
-                                    <td><input class="input" id="calcVG" type="number" step="1" min="0" max="100"></td>
-                                    <td>%</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div id="calcBase">
-                            <table id="calcBaseT">
-                                <tr>
-                                    <th colspan="3">Base Mix</th>
-                                </tr>
-                                <tr>
-                                    <td class="inputDescription">Strength</td>
-                                    <td><input  class="input" id="calcBaseStrength" type="number" step="1" min="0" value="100"></td>
-                                    <td>mg/ml</td>
-                                </tr>
-                                <tr>
-                                    <td class="inputDescription">PG</td>
-                                    <td><input class="input" id="calcBasePG" type="number" step="100" min="0" max="100" value="0"></td>
-                                    <td>%</td>
-                                </tr>
-                                <tr>
-                                    <td class="inputDescription">VG</td>
-                                    <td><input class="input" id="calcBaseVG" type="number" step="100" min="0" max="100" value="100"></td>
-                                    <td>%</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div id="calcComments">
-                        <textarea id="calcCommentsBox" placeholder="Comments"></textarea>
-                    </div>
-                </div>
-                <div id="calcFlavors">
-                    <div id="calcChangeFlavors">
-                        <button id="calcAddFlavor" onclick="addFlavor()">Add flavor</button>
-                        <button id="calcRemoveFlavor" onclick="removeFlavor()">Remove flavor</button>
-                    </div>
-                    <h4>Flavors</h4>
-                </div>
-            </div>
-            <div id="calcResult">
-                <div class="calcResultRow">
-                    <div class="calcResultFlavor"></div>
-                    <p class="calcResultVolume">mL</p>
-                    <p class="calcResultMass">Grams</p>
-                    <p class="calcResultPercent">%</p></div>
-                <div class="calcResultRow">
-                    <p class="calcResultFlavor">Base</p>
-                    <p class="calcResultVolume" id="calcResultBaseVolume">0</p>
-                    <p class="calcResultMass" id="calcResultBaseMass">0</p>
-                    <p class="calcResultPercent" id="calcResultBasePercent">0</p>
-                </div>
-                <div class="calcResultRow">
-                    <p class="calcResultFlavor">PG</p>
-                    <p class="calcResultVolume" id="calcResultPGVolume">0</p>
-                    <p class="calcResultMass" id="calcResultPGMass">0</p>
-                    <p class="calcResultPercent" id="calcResultPGPercent">0</p>
-                </div>
-                <div class="calcResultRow">
-                    <p class="calcResultFlavor">VG</p>
-                    <p class="calcResultVolume" id="calcResultVGVolume">0</p>
-                    <p class="calcResultMass" id="calcResultVGMass">0</p>
-                    <p class="calcResultPercent" id="calcResultVGPercent">0</p>
-                </div>
-                <div id="calcResultRowSpacer"></div>
-            </div>
-        </div>
-        <!--Recipes are here-->
-        <div id="recipes">
-            Recipes
-        </div>
-        <!--Flavors are here-->
-        <div id="flavors">
-            Flavors
-        </div>
-        <!--Batch history is here-->
-        <div id="batchHistory">
-            Batch History
-        </div>
-    </div>
+    
+    
+    <!--Calculator is here-->
+    <div id="calculator">Calculator</div>
+
+
+    <!--Recipes are here-->
+    <div id="recipes">Recipes</div>
+
+
+    <!--Flavors are here-->
+    <div id="flavors">Flavors</div>
+
+
+    <!--Batch history is here-->
+    <div id="batchHistory">Batch History</div>
+
+    
     <script src="./scripts/index.js"></script>
 </body>
 </html>
