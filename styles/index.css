@@ -1,36 +1,9 @@
 body {
-    background-color: rgb(41, 41, 41);
-    color: rgb(220, 220, 220);
-    font-family: Arial;
-    font-size: larger;
+    background-color: black;
     margin: 0;
     padding: 0;
 }
-#views {
-    overflow: auto
-}
-input {
-    font-size: large;
-    color: inherit;
-    background-color: inherit;
-}
-textarea {
-    resize: none;
-    font-family: inherit;
-    font-size: large;
-}
-button {
-    font-size: medium;
-    background-color: inherit;
-    color: inherit;
-    border: 2px outset;
-}
-p {
-    margin: 0px;
-}
 
-
-/*Menu Layout*/
 #menu {
     list-style-type: none;
     margin: 0;
@@ -38,8 +11,9 @@ p {
     overflow: hidden;
     background-color: rgb(5, 124, 1);
 }
+
 #menu li {
-    font-family: Arial;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: large;
     display: inline-block;
     color: white;
@@ -47,140 +21,17 @@ p {
     padding: 10px 15px;
     cursor: default
 }
+
 #menu li:hover {
     background-color: rgb(2, 70, 0);
     color: rgb(207, 207, 207);
 }
-#recipes, #flavors, #batchHistory {
-    display: none
+
+div {
+    border: 1px solid red;
+    color: white;
 }
 
-
-/*Calculator Layout*/
-#calcTop {
-    height: 600px;
-}
-#calcLeft {
-    position: relative;
-    float: left;
-    width: 50%;
-    height: 100%;
-}
-#calcTopLeft {
-    width: 100%;
-    height: 50%;
-}
-#calcMix, #calcBase {
-    float: left;
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-}
-#calcComments {
-    position: absolute;
-    height: 50%;
-    width: 100%;
-}
-#calcFlavors {
-    position: relative;
-    float: right;
-    width: 50%;
-    height: 100%;
-    overflow-x: hidden;
-}
-table {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 40px;
-}
-td {
-    padding-top: 20px;
-}
-.input {
-    width: 55px;
-}
-.inputDescription {
-    text-align: right;
-}
-.calcNewFlavor {
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-    height: 45px;
-}
-.calcNewFlavorName {
-    float: left;
-    width: 200px;
-}
-.calcNewFlavorP {
-    float: left;
-    width: 60px;
-    margin-left: 20px;
-    margin-right: 5px;
-}
-h4 {
-    text-align: center;
-    margin: 43px 0px 23px;
-}
-.calcNewFlavorSign {
-    float: left;
-    margin: 4px 0px;
-}
-#calcCommentsBox {
-    margin: 35px 0px 0px 10px;
-    width: 95%;
-    height: 80%;
-    color: inherit;
-    background-color: inherit;
-}
-#calcChangeFlavors {
-    position: absolute;
-    top: 0px;
-    width: 100%;
-    margin-left: 10px;
-    margin-top: 10px;
-}
-#calcResult {
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
-    border: 4px ridge rgb(177 177 177);
-}
-.calcResultRow {
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-    height: 22px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-#calcResultRowSpacer {
-    height: 15px;
-}
-.calcResultFlavor {
-    float:left;
-    width: 430px;
-    height: 100%;
-    overflow: hidden;
-}
-.calcResultVolume {
-    float:left;
-    width: 60px;
-    margin-right: 60px;
-    text-align: right;
-}
-.calcResultMass {
-    float:left;
-    width: 60px;
-    text-align: right;
-    margin-right: 30px;
-}
-.calcResultPercent {
-    float: left;
-    color: grey;
-    width: 60px;
-    overflow: hidden;
-}
-.calcResultRowEven {
-    background-color: rgb(51, 51, 51);
-}
+#recipes {display: none}
+#flavors {display: none}
+#batchHistory {display: none}
