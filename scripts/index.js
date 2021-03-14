@@ -75,11 +75,7 @@ function addFlavor() {
     resultsPercent.innerHTML = "0"
     //  add event listener for flavor name
     newInput.onchange = () => {
-        if (newInput.value == "") {
-            resultsFlavorName.innerHTML = "Flavor " + i
-        } else {
-            resultsFlavorName.innerHTML = newInput.value
-        }
+        resultsFlavorName.innerHTML = newInput.value == "" ? newInput.placeholder : newInput.value
     }
     //  add flavor to array
     calcFlavorList.push(newFlavor)
