@@ -51,9 +51,6 @@ p {
     background-color: rgb(2, 70, 0);
     color: rgb(207, 207, 207);
 }
-#recipes, #flavors, #batchHistory {
-    display: none
-}
 
 
 /*Calculator Layout*/
