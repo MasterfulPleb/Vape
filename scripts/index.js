@@ -1,4 +1,4 @@
-var fs = require('fs')
+var fs = require('fs-extra')
 
 
 console.log('Vape Shit 0.2.0 initiated')
