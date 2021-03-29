@@ -57,6 +57,9 @@ function addFlavor() {
     let newP = newFlavor.appendChild(document.createElement('p'))
     newP.className = 'calcNewFlavorSign'
     newP.innerHTML = '%'
+    let newIndicator = newFlavor.appendChild(document.createElement('img'))
+    newIndicator.className = 'indicator'
+    newIndicator.src = 'images/red_indicator.png'
     //  add result flavor
     let resultsNewFlavor = document.getElementById('calcResult').appendChild(document.createElement('div'))
     resultsNewFlavor.id = 'calcResultFlavor' + calcFlavorCount
@@ -111,21 +114,25 @@ function updateCalc() {
     //  flavors calculation
     for (i = 0;  i < calcFlavorCount; i++) {
         let flavorP = calcFlavorList[i].getElementsByClassName('calcNewFlavorP')[0].value
+        let flavorName = calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value
         if (flavorP == '') {
+            if (flavorDensityArray.some(obj => obj.flavor == flavorName)) {
+                calcFlavorList[i].getElementsByClassName('indicator')[0].src = 'images/green_indicator.png'
+            } else {
+                calcFlavorList[i].getElementsByClassName('indicator')[0].src = 'images/red_indicator.png'
+            }
             calcResultFlavorList[i].getElementsByClassName('calcResultVolume')[0].innerHTML = '0'
             calcResultFlavorList[i].getElementsByClassName('calcResultMass')[0].innerHTML = '0'
             calcResultFlavorList[i].getElementsByClassName('calcResultPercent')[0].innerHTML = '0'
-            //turn off indicator
         } else {
-            let flavorName = calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value
             let density = 1.036
             if (flavorDensityArray.some(obj => obj.flavor == flavorName)) {
                 density = flavorDensityArray.find(obj => obj.flavor == flavorName).density
-                //turn on indicator
+                calcFlavorList[i].getElementsByClassName('indicator')[0].src = 'images/green_indicator.png'
             } else {
-                //turn off indicator
+                calcFlavorList[i].getElementsByClassName('indicator')[0].src = 'images/red_indicator.png'
             }
-            flavorP = parseInt(flavorP)
+            flavorP = parseFloat(flavorP)
             totalFlavorPercent += flavorP
             let flavorVolume = flavorP * calcAmmount.value / 100
             let flavorMass = flavorVolume * density
@@ -227,43 +234,6 @@ function loadRecipe(recipeName) {
         calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value
     }
     console.log('recipe loaded')
-}
-//  old load function
-function loadRecipeOld(recipeName) {
-    let address = './data/recipes/' + recipeName + '.csv'
-    let arr = []
-    fs.readFile(address, (err, data) => {
-        let bufferString
-        bufferString = data.toString()
-        arr = bufferString.split('\n')
-        for (i = 0; i < arr.length; i++) {
-            arr[i] = arr[i].split('|')
-        }
-        workingRecipe = arr
-        if (arr[arr.length - 1][0] == '') {
-            arr = arr[arr.length - 2]
-        } else {
-            arr = arr[arr.length - 1]
-        }
-        calcAmmount.value = arr[0]
-        calcStrength.value = arr[1]
-        calcPG.value = arr[2]
-        calcVG.value = arr[3]
-        calcBaseStrength.value = arr[4]
-        calcBasePG.value = arr[5]
-        calcBaseVG.value = arr[6]
-        document.getElementById('calcCommentsBox').value = JSON.parse(arr[7])
-        for (i = calcFlavorCount; i > -1; i--) {
-            removeFlavor()
-        }
-        for (i = 0, f = 9; i < parseInt(arr[8]); i++, f++) {
-            addFlavor()
-            calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value = arr[f]
-            f++
-            calcFlavorList[i].getElementsByClassName('calcNewFlavorP')[0].value = arr[f]
-        }
-        updateCalc()
-    })
 }
 addFlavor()
 let flavorDensityArray = []

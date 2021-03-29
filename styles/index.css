@@ -181,3 +181,7 @@ h4 {
 .calcResultRowEven {
     background-color: rgb(51, 51, 51);
 }
+.indicator {
+    height: 15px;
+    margin: 7px
+}
