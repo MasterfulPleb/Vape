@@ -36,6 +36,22 @@ calcBasePG.onchange = () => calcBaseVG.value = '100' - calcBasePG.value
 calcBaseVG.onchange = () => calcBasePG.value = '100' - calcBaseVG.value
 $('#calcFlavors').on('change', updateCalc)
 $('#calcTopLeft').on('change', updateCalc)
+$('#calcAddFlavor').on('click', addFlavor)
+$('#calcRemoveFlavor').on('click', removeFlavor)
+$('#calcLoadRecipe').on('click', () => {
+    let x = document.getElementById('calcRecipeName').value
+    if (x != '') loadRecipe(x)
+})
+$('#calcSaveRecipe').on('click', () => {
+    let x = document.getElementById('calcRecipeName').value
+    x != '' ? saveRecipe(x) : alert('No recipe name has been entered')
+})
+$('#calcRecipeName').on('keypress', (e) => {
+    if (e.key === 'Enter') {
+        let x = document.getElementById('calcRecipeName').value
+        if (x != '') loadRecipe(x)
+    }
+})
 function addFlavor() {
     calcFlavorCount++
     //  add flavor 
@@ -64,7 +80,7 @@ function addFlavor() {
     let resultsNewFlavor = document.getElementById('calcResult').appendChild(document.createElement('div'))
     resultsNewFlavor.id = 'calcResultFlavor' + calcFlavorCount
     resultsNewFlavor.className = 'calcResultRow'
-    if (calcFlavorCount % 2 == 0 ) {
+    if (calcFlavorCount % 2 == 0) {
         resultsNewFlavor.classList.add('calcResultRowEven')
     }
     let resultsFlavorName = resultsNewFlavor.appendChild(document.createElement('p'))
@@ -101,18 +117,19 @@ function removeFlavor() {
         calcFlavorCount--
         //  remove flavor from array
         calcFlavorList.length -= 1
-        calcResultFlavorList.length -=1
+        calcResultFlavorList.length -= 1
         //  update calculator
         updateCalc()
     }
 }
 function rounded(x) {
-    return Math.round(x * Math.pow(10,2)) / Math.pow(10,2)
+    return Math.round(x * Math.pow(10, 2)) / Math.pow(10, 2)
 }
 function updateCalc() {
     let totalFlavorPercent = 0
+    let calcAmmountTotal = calcAmmount.value
     //  flavors calculation
-    for (i = 0;  i < calcFlavorCount; i++) {
+    for (i = 0; i < calcFlavorCount; i++) {
         let flavorP = calcFlavorList[i].getElementsByClassName('calcNewFlavorP')[0].value
         let flavorName = calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value
         if (flavorP == '') {
@@ -134,7 +151,7 @@ function updateCalc() {
             }
             flavorP = parseFloat(flavorP)
             totalFlavorPercent += flavorP
-            let flavorVolume = flavorP * calcAmmount.value / 100
+            let flavorVolume = flavorP * calcAmmountTotal / 100
             let flavorMass = flavorVolume * density
             calcResultFlavorList[i].getElementsByClassName('calcResultVolume')[0].innerHTML = rounded(flavorVolume)
             calcResultFlavorList[i].getElementsByClassName('calcResultMass')[0].innerHTML = rounded(flavorMass)
@@ -144,24 +161,34 @@ function updateCalc() {
     //  everything else calculation
     let basePGVGDensity = calcBasePG.value / 100 * 1.036 + calcBaseVG.value / 100 * 1.261
     let baseDensity = calcBaseStrength.value / 1000 * 1.01 + (1 - calcBaseStrength.value / 1000) * basePGVGDensity
-    let BV = calcAmmount.value * calcStrength.value / calcBaseStrength.value
+    let BV = calcAmmountTotal * calcStrength.value / calcBaseStrength.value
     let BM = BV * baseDensity
-    let BP = 100 * BV / calcAmmount.value
-    let PGV = ((calcPG.value - totalFlavorPercent) * calcAmmount.value - calcBasePG.value * BV) / 100
+    let BP = 100 * BV / calcAmmountTotal
+    let PGV = ((calcPG.value - totalFlavorPercent) * calcAmmountTotal - calcBasePG.value * BV) / 100
     let PGM = PGV * 1.036
-    let PGP = 100 * PGV / calcAmmount.value
-    let VGV = (calcVG.value * calcAmmount.value - calcBaseVG.value * BV) / 100
+    let PGP = 100 * PGV / calcAmmountTotal
+    let VGV = (calcVG.value * calcAmmountTotal - calcBaseVG.value * BV) / 100
     let VGM = VGV * 1.261
-    let VGP = 100 * VGV / calcAmmount.value
+    let VGP = 100 * VGV / calcAmmountTotal
     $('#calcResultBaseVolume').text(rounded(BV))
     $('#calcResultBaseMass').text(rounded(BM))
-    $('#calcResultBasePercent').text(rounded(BP))
     $('#calcResultPGVolume').text(rounded(PGV))
     $('#calcResultPGMass').text(rounded(PGM))
-    $('#calcResultPGPercent').text(rounded(PGP))
     $('#calcResultVGVolume').text(rounded(VGV))
     $('#calcResultVGMass').text(rounded(VGM))
-    $('#calcResultVGPercent').text(rounded(VGP))
+    if (calcAmmountTotal == '') {
+        $('#calcResultBasePercent').text('0')
+        $('#calcResultPGPercent').text('0')
+        $('#calcResultVGPercent').text('0')
+    } else if (calcAmmountTotal == '0') {
+        $('#calcResultBasePercent').text('0')
+        $('#calcResultPGPercent').text('0')
+        $('#calcResultVGPercent').text('0')
+    } else {
+        $('#calcResultBasePercent').text(rounded(BP))
+        $('#calcResultPGPercent').text(rounded(PGP))
+        $('#calcResultVGPercent').text(rounded(VGP))
+    }
 }
 function parseCSV(input, output) {
     fs.readFile(input, (err, data) => {
@@ -180,35 +207,57 @@ function parseCSV(input, output) {
         }
     })
 }
-function saveRecipe(recipeName) {
-    let recipe = [calcAmmount.value, calcStrength.value, calcPG.value, calcVG.value, calcBaseStrength.value, calcBasePG.value, calcBaseVG.value, JSON.stringify(document.getElementById('calcCommentsBox').value), calcFlavorCount]
+addFlavor()
+let flavorDensityArray = []
+parseCSV('./data/flavorDensity.csv', flavorDensityArray)
+
+
+/**
+ * Recipes Functionality
+ */
+async function saveRecipe(recipeName) {
+    let flavorCount = calcFlavorCount
     for (i = 0; i < calcFlavorCount; i++) {
+        let fName = calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value
+        let fP = calcFlavorList[i].getElementsByClassName('calcNewFlavorP')[0].value
+        if (fName == fP) flavorCount--
+    }
+    let recipe = [calcAmmount.value, calcStrength.value, calcPG.value, calcVG.value, calcBaseStrength.value, calcBasePG.value, calcBaseVG.value, JSON.stringify(document.getElementById('calcCommentsBox').value), flavorCount]
+    for (i = 0; i < flavorCount; i++) {
         recipe.push(calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value)
         recipe.push(calcFlavorList[i].getElementsByClassName('calcNewFlavorP')[0].value)
     }
     recipe = recipe.join('|')
     recipe += '\n'
     let address = './data/recipes/' + recipeName + '.csv'
-    fs.appendFile(address, recipe, (err) => {
-        if (err) throw err
-        console.log('recipe saved')
+    await new Promise((resolve, reject) => {
+        fs.appendFile(address, recipe, (err) => {
+            resolve()
+        })
     })
+    if (recipeList.some(flavor => flavor == recipeName) ? false : true) updateRecipeList()
+    console.log("saved '" + recipeName + "'")
 }
 function importRecipe(recipeName) {
     let address = './data/recipes/' + recipeName + '.csv'
-    let bufferString = fs.readFileSync(address)
-    let arr = bufferString.toString().split('\n')
-    for (i = 0; i < arr.length; i++) {
-        arr[i] = arr[i].split('|')
-    }
-    if (arr[arr.length - 1][0] == '') {
-        arr.length -= 1
-    }
-    workingRecipe = arr
-    console.log('imported')
+    return new Promise((resolve, reject) => {
+        fs.readFile(address, (err, data) => {
+            let arr = data.toString().split('\n')
+            for (i = 0; i < arr.length; i++) {
+                arr[i] = arr[i].split('|')
+            }
+            if (arr[arr.length - 1][0] == '') {
+                arr.length -= 1
+            }
+            workingRecipe = arr
+            console.log("imported '" + recipeName + "'")
+            resolve()
+        })
+    })
 }
-function loadRecipe(recipeName) {
-    importRecipe(recipeName)
+async function loadRecipe(recipeName) {
+    if (recipeList.some(flavor => flavor == recipeName) ? false : true) return false
+    await importRecipe(recipeName)
     let arr = workingRecipe[workingRecipe.length - 1]
     calcAmmount.value = arr[0]
     calcStrength.value = arr[1]
@@ -217,8 +266,7 @@ function loadRecipe(recipeName) {
     calcBaseStrength.value = arr[4]
     calcBasePG.value = arr[5]
     calcBaseVG.value = arr[6]
-    let comment = JSON.parse(arr[7])
-    document.getElementById('calcCommentsBox').value = comment
+    document.getElementById('calcCommentsBox').value = JSON.parse(arr[7])
     for (i = calcFlavorCount; i > -1; i--) {
         removeFlavor()
     }
@@ -231,12 +279,37 @@ function loadRecipe(recipeName) {
     updateCalc()
     for (i = 0; i < calcFlavorCount; i++) {
         calcResultFlavorList[i].getElementsByClassName('calcResultFlavor')[0].innerHTML =
-        calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value
+            calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value
     }
-    console.log('recipe loaded')
+    console.log("loaded '" + recipeName + "'")
 }
-addFlavor()
-let flavorDensityArray = []
-parseCSV('./data/flavorDensity.csv', flavorDensityArray)
+function importRecipeList() {
+    return new Promise((resolve, reject) => {
+        fs.readdir('./data/recipes', (err, files) => {
+            for (i = 0; i < files.length; i++) {
+                files[i] = files[i].slice(0, -4)
+            }
+            recipeList = files
+            resolve()
+        })
+    })
+}
+async function updateRecipeList() {
+    await importRecipeList()
+    document.getElementById('recipesList').innerHTML = ''
+    for (i = 0; i < recipeList.length; i++) {
+        let recipe = recipeList[i]
+        let newRecipe = document.getElementById('recipesList').appendChild(document.createElement('li'))
+        newRecipe.innerHTML = recipe
+        newRecipe.className = 'recipes'
+        newRecipe.onclick = () => {
+            importRecipe(recipe)
+            $('#recipeData').html(recipe)
+        }
+    }
+    
+}
 /** @type {Array<Array<String>>} */
 let workingRecipe = [[]]
+let recipeList = []
+updateRecipeList()
