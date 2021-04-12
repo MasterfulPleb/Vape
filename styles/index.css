@@ -7,7 +7,7 @@ body {
     padding: 0;
 }
 #views {
-    overflow: auto
+    overflow: auto;
 }
 input {
     font-size: large;
@@ -39,13 +39,12 @@ p {
     background-color: rgb(5, 124, 1);
 }
 #menu li {
-    font-family: Arial;
     font-size: large;
     display: inline-block;
     color: white;
     text-align: center;
     padding: 10px 15px;
-    cursor: default
+    cursor: default;
 }
 #menu li:hover {
     background-color: rgb(2, 70, 0);
@@ -93,7 +92,7 @@ table {
 td {
     padding-top: 20px;
 }
-.input {
+input {
     width: 55px;
 }
 .inputDescription {
@@ -130,9 +129,8 @@ h4 {
     color: inherit;
     background-color: inherit;
 }
-#calcChangeFlavors {
+#calcAddRemove {
     position: absolute;
-    top: 0px;
     width: 100%;
     margin-left: 10px;
     margin-top: 10px;
@@ -167,7 +165,7 @@ h4 {
     text-align: right;
 }
 .calcResultMass {
-    float:left;
+    float: left;
     width: 60px;
     text-align: right;
     margin-right: 30px;
@@ -180,4 +178,85 @@ h4 {
 }
 .calcResultRowEven {
     background-color: rgb(51, 51, 51);
+}
+.indicator {
+    height: 15px;
+    margin: 7px
+}
+#calcLoadSave {
+    position: absolute;
+    width: 100%;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+#calcRecipeName {
+    width: auto;
+}
+
+
+/*Recipes Layout*/
+#recipes {
+    position: absolute;
+    height: 89%;
+    width: 100%;
+}
+#recipeList {
+    border: 4px ridge rgb(140 140 140);
+    width: 20%;
+    min-height: 500px;
+    height: 100%;
+    margin: 1% 1%;
+    float: left;
+}
+#recipeList ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    width: fit-content;
+    min-width: 150px;
+    height: inherit;
+    float: left;
+}
+#recipeList ul li {
+    padding: 3px 30px 3px 10px;
+    cursor: default;
+}
+#recipeList ul li:nth-child(even) {
+    background-color: rgb(51, 51, 51);
+}
+#recipeList ul li:hover {
+    background-color: rgb(29 29 29);
+    color: rgb(160 160 160);
+}
+#recipeToggle {
+    position: relative;
+    float: right;
+    width: 20px;
+    height: inherit;
+    border-left: 2px ridge rgb(140 140 140);
+}
+#recipeToggle:hover {
+    background-color: rgb(29 29 29);
+}
+#recipeToggle p {
+    margin-left: 6px;
+    position: absolute;
+    top: 50%;
+}
+#recipeToggle p i {
+    border: solid;
+    border-color: rgb(140 140 140);
+    border-width: 0px 5px 5px 0;
+    display: inline-block;
+    padding: 5px;
+    transform: rotate(135deg);
+}
+#recipeView {
+    border: 2px solid red;
+    float: left;
+    width: 76%;
+    height: 100%;
+    position: relative;
+    margin: 1.1% 0;
 }
