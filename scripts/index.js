@@ -23,6 +23,7 @@ let calcFlavorCount = 0
 let calcFlavorList = []
 /** @type {Array<HTMLElement>} */
 let calcResultFlavorList = []
+let flavorDensityArray = []
 const calcAmmount = document.getElementById('calcAmmount')
 const calcStrength = document.getElementById('calcStrength')
 const calcPG = document.getElementById('calcPG')
@@ -208,13 +209,34 @@ function parseCSV(input, output) {
     })
 }
 addFlavor()
-let flavorDensityArray = []
 parseCSV('./data/flavorDensity.csv', flavorDensityArray)
 
 
 /**
  * Recipes Functionality
  */
+/** @type {Array<Array<String>>} */
+let workingRecipe = [[]]
+let recipeList = []
+let recipeListHidden = false
+$('#recipeToggle').on('click', () => {
+    if (recipeListHidden) {
+        $('#recipeList').children('ul').css('display', 'block')
+        $('#recipeList').css('width', '20%')
+        $('#recipeToggle').children('p').children('i').css('transform', 'rotate(135deg)')
+        $('#recipeToggle').children('p').css('margin-left', '6px')
+        $('#recipeToggle').css('border-left', '2px ridge rgb(140 140 140)')
+        $('#recipeView').css('width', '76%')
+    } else {
+        $('#recipeList').children('ul').css('display', 'none')
+        $('#recipeList').css('width', '1.7%')
+        $('#recipeToggle').children('p').children('i').css('transform', 'rotate(-45deg)')
+        $('#recipeToggle').children('p').css('margin-left', '-1px')
+        $('#recipeToggle').css('border-left', 'none')
+        $('#recipeView').css('width', '94%')
+    }
+    recipeListHidden = !recipeListHidden
+})
 async function saveRecipe(recipeName) {
     let flavorCount = calcFlavorCount
     for (i = 0; i < calcFlavorCount; i++) {
@@ -296,20 +318,16 @@ function importRecipeList() {
 }
 async function updateRecipeList() {
     await importRecipeList()
-    document.getElementById('recipesList').innerHTML = ''
+    $('#recipeList').children('ul').html = ''
     for (i = 0; i < recipeList.length; i++) {
         let recipe = recipeList[i]
-        let newRecipe = document.getElementById('recipesList').appendChild(document.createElement('li'))
-        newRecipe.innerHTML = recipe
-        newRecipe.className = 'recipes'
-        newRecipe.onclick = () => {
+        let newRecipe = $('<li></li>').text(recipe)
+        $('#recipeList').children('ul').append(newRecipe)
+        newRecipe.on('click', () => {
             importRecipe(recipe)
-            $('#recipeData').html(recipe)
-        }
+            $('#recipeData').html(recipe + ' placeholder')
+        })
     }
     
 }
-/** @type {Array<Array<String>>} */
-let workingRecipe = [[]]
-let recipeList = []
 updateRecipeList()
