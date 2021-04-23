@@ -271,3 +271,27 @@ h4 {
 #recipeName {
     width: auto;
 }
+#recipeData {
+    position: relative;
+    height: calc(100% - 52px);
+    margin-top: 25px;
+    overflow: auto;
+}
+#recipeTable {
+    margin: 0;
+    border-collapse: collapse;
+}
+#recipeTable tbody tr td {
+    min-width: 135px;
+    padding: 10px 5px;
+    text-align: right;
+}
+#recipeTable tbody tr:nth-child(even) {
+    background-color: rgb(58, 58, 58);
+}
+#recipeTable tbody tr td:nth-child(even) {
+    background-color: rgb(45, 45, 45);
+}
+#recipeTable tbody tr:nth-child(even) td:nth-child(even) {
+    background-color: rgb(53, 53, 53);
+}

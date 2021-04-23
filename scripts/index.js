@@ -255,16 +255,28 @@ async function saveRecipe(recipeName) {
     let date = d.getMonth() + '/' + d.getDate() + '/' + y
     let time = d.getHours() + ':' + d.getMinutes()
     let flavorCount = calcFlavorCount
-    for (i = 0; i < calcFlavorCount; i++) {
-        let fName = calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value
-        let fP = calcFlavorList[i].getElementsByClassName('calcNewFlavorP')[0].value
-        if (fName == fP) flavorCount--
+    let flavorList = [...calcFlavorList]
+    for (i = 0; i < flavorCount; i++) {
+        let fName = flavorList[i].getElementsByClassName('calcNewFlavorName')[0].value
+        let fP = flavorList[i].getElementsByClassName('calcNewFlavorP')[0].value
+        if (fName == fP) {
+            flavorList.splice(i, 1)
+            flavorCount--
+            i--
+        } else if (fName == '') {
+            alert('Please enter a flavor name for flavor' + (i + 1))
+            return false
+        } else if (fP == '') {
+            alert('Please enter a flavor %')
+            return false
+        }
     }
     let recipe = [recipeName, version, date, time, calcAmmount.value, calcStrength.value, calcPG.value, calcVG.value, calcBaseStrength.value, calcBasePG.value, calcBaseVG.value, JSON.stringify(document.getElementById('calcCommentsBox').value), flavorCount]
     for (i = 0; i < flavorCount; i++) {
-        recipe.push(calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value)
-        recipe.push(calcFlavorList[i].getElementsByClassName('calcNewFlavorP')[0].value)
+        recipe.push(flavorList[i].getElementsByClassName('calcNewFlavorName')[0].value)
+        recipe.push(flavorList[i].getElementsByClassName('calcNewFlavorP')[0].value)
     }
+    calcRecipe.push(recipe)
     recipe = recipe.join('|')
     recipe += '\n'
     let address = './data/recipes/' + recipeName + '.csv'
@@ -303,7 +315,7 @@ function importRecipe(recipeName, destination) {
 async function loadRecipeCalc(recipeName) {
     if (recipeList.some(flavor => flavor == recipeName) ? false : true) return false
     await importRecipe(recipeName, 'calc')
-    let arr = workingRecipe[workingRecipe.length - 1]
+    let arr = [...calcRecipe[calcRecipe.length - 1]]
     calcAmmount.value = arr[4]
     calcStrength.value = arr[5]
     calcPG.value = arr[6]
@@ -370,6 +382,7 @@ async function loadRecipeData(recipeName) {
         let newFlavor = $('<tr class="row' + row + ' del"></tr>').html('<td>' + flavors[i] + '</td>')
         $('#recipeTableBody').append(newFlavor)
     }
+    $('#recipeTableBody tr td').attr('text-align', 'left')
     $('#recipeName').attr('value', recipeName)
     for (i = 0; i < versions; i++) {
         $('.row1').append('<td class="del"><p>v' + workingRecipe[i][1] + '</p><p>' + workingRecipe[i][2] + '</p></td>')
@@ -393,6 +406,9 @@ async function loadRecipeData(recipeName) {
             $('.row' + row).append('<td class="del">' + value + '</td>')
         })
     }
-    console.log('recipe loaded')
+    console.log('recipe data loaded')
 }
 updateRecipeList()
+
+
+//make recipes buttons work
