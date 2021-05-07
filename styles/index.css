@@ -282,7 +282,7 @@ h4 {
     border-collapse: collapse;
 }
 #recipeTable tbody tr td {
-    min-width: 135px;
+    min-width: 140px;
     padding: 10px 5px;
     text-align: right;
 }
@@ -294,4 +294,15 @@ h4 {
 }
 #recipeTable tbody tr:nth-child(even) td:nth-child(even) {
     background-color: rgb(53, 53, 53);
+}
+.col1 {
+    display: inline-block;
+    position: sticky;
+    left: 0;
+    width: min-content;
+    border-right: 2px solid grey;
+    background-color: rgb(41, 41, 41);
+}
+#recipeTable tbody tr:nth-child(even) td:first-child {
+    background-color: rgb(58, 58, 58);
 }

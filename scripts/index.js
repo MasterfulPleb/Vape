@@ -212,6 +212,7 @@ parseCSV('./data/flavorDensity.csv', flavorDensityArray)
  */
 /** @type {Array<Array<String>>} */
 let workingRecipe = [[]]
+let workingRecipeName = ''
 let calcRecipe = [[]]
 let recipeList = []
 let recipeListHidden = false
@@ -232,6 +233,18 @@ $('#recipeToggle').on('click', () => {
         $('#recipeView').css('width', 'calc(100% - 38px)')
     }
     recipeListHidden = !recipeListHidden
+})
+$('#recipeChangeName').on('click', () => {
+    let newRecipeName = document.getElementById('recipeName').value
+    changeRecipeName(workingRecipeName, newRecipeName)
+})
+$('#recipeSave').on('click', () => {
+    let n = document.getElementById('recipeName').value
+    changeRecipe(n)
+})
+$('#recipeToCalc').on('click', () => {
+    loadRecipeCalc(workingRecipeName)
+    switchView('calc')
 })
 async function saveRecipe(recipeName) {
     let version = 0
@@ -281,7 +294,7 @@ async function saveRecipe(recipeName) {
     recipe += '\n'
     let address = './data/recipes/' + recipeName + '.csv'
     await new Promise((resolve, reject) => {
-        fs.appendFile(address, recipe, (err) => {
+        fs.appendFile(address, recipe, () => {
             resolve()
         })
     })
@@ -340,6 +353,50 @@ async function loadRecipeCalc(recipeName) {
     }
     console.log("loaded '" + recipeName + "'")
 }
+async function loadRecipeData(recipeName) {
+    await importRecipe(recipeName, 'recipes')
+    workingRecipeName = recipeName
+    let flavors = []
+    let versions = workingRecipe.length
+    for (i = 0; i < versions; i++) {
+        for (x = 13; x < workingRecipe[i].length; x += 2) {
+            let duplicate = flavors.some(flavor => flavor == workingRecipe[i][x])
+            if (!duplicate) {
+                flavors.push(workingRecipe[i][x])
+            }
+        }
+    }
+    $('.del').remove()
+    for (i = 0; i < flavors.length; i++) {
+        let row = i + 8
+        let newFlavor = $('<tr class="row' + row + ' del"></tr>').html('<td class="col1">' + flavors[i] + '</td>')
+        $('#recipeTableBody').append(newFlavor)
+    }
+    $('#recipeName').val(recipeName)
+    for (i = 0; i < versions; i++) {
+        $('.row1').append('<td class="del"><p>v' + workingRecipe[i][1] + '</p><p>' + workingRecipe[i][2] + '</p></td>')
+        $('.row1 td').last().children().first().css('float', 'left')
+        $('.row1 td').last().children().last().css('float', 'right')
+        $('.row2').append('<td class="del">' + workingRecipe[i][4] + '</td>')
+        $('.row3').append('<td class="del">' + workingRecipe[i][5] + '</td>')
+        $('.row4').append('<td class="del">' + workingRecipe[i][6] + '/' + workingRecipe[i][7] + '</td>')
+        $('.row5').append('<td class="del">' + workingRecipe[i][8] + '</td>')
+        $('.row6').append('<td class="del">' + workingRecipe[i][9] + '/' + workingRecipe[i][10] + '</td>')
+        $('.row7').append('<td class="del"></td>')
+        flavors.forEach((flavor, index) => {
+            let row = index + 8
+            let x = workingRecipe[i].indexOf(flavor)
+            let value
+            if (x == -1) {
+                value = '-'
+            } else {
+                value = workingRecipe[i][x + 1]
+            }
+            $('.row' + row).append('<td class="">' + value + '</td>')
+        })
+    }
+    console.log('recipe data loaded')
+}
 function importRecipeList() {
     return new Promise((resolve, reject) => {
         fs.readdir('./data/recipes', (err, files) => {
@@ -364,51 +421,43 @@ async function updateRecipeList() {
     }
     console.log('recipe list updated')
 }
-async function loadRecipeData(recipeName) {
-    await importRecipe(recipeName, 'recipes')
-    let flavors = []
-    let versions = workingRecipe.length
-    for (i = 0; i < versions; i++) {
-        for (x = 13; x < workingRecipe[i].length; x += 2) {
-            let duplicate = flavors.some(flavor => flavor == workingRecipe[i][x])
-            if (!duplicate) {
-                flavors.push(workingRecipe[i][x])
-            }
+async function changeRecipe(recipeName) {//overwrites file with any changes to working recipe OR creates new file if different name
+    let recipe = ''
+    let address = './data/recipes/' + recipeName + '.csv'
+    if (recipeName != workingRecipeName) {
+        if (recipeList.some(name => name == recipeName)) {
+            alert('Recipe name already exists, please choose another')
+            return false
+        }
+        if (!confirm('Recipe name has changed, this will create a new recipe with current history')) {
+            return false
         }
     }
-    $('.del').remove()
-    for (i = 0; i < flavors.length; i++) {
-        let row = i + 8
-        let newFlavor = $('<tr class="row' + row + ' del"></tr>').html('<td>' + flavors[i] + '</td>')
-        $('#recipeTableBody').append(newFlavor)
+    for (i = 0; i < workingRecipe.length; i++) {
+        recipe += workingRecipe[i].join('|')
+        recipe += '\n'
     }
-    $('#recipeTableBody tr td').attr('text-align', 'left')
-    $('#recipeName').attr('value', recipeName)
-    for (i = 0; i < versions; i++) {
-        $('.row1').append('<td class="del"><p>v' + workingRecipe[i][1] + '</p><p>' + workingRecipe[i][2] + '</p></td>')
-        $('.row1 td').last().children().first().css('float', 'left')
-        $('.row1 td').last().children().last().css('float', 'right')
-        $('.row2').append('<td class="del">' + workingRecipe[i][4] + '</td>')
-        $('.row3').append('<td class="del">' + workingRecipe[i][5] + '</td>')
-        $('.row4').append('<td class="del">' + workingRecipe[i][6] + '/' + workingRecipe[i][7] + '</td>')
-        $('.row5').append('<td class="del">' + workingRecipe[i][8] + '</td>')
-        $('.row6').append('<td class="del">' + workingRecipe[i][9] + '/' + workingRecipe[i][10] + '</td>')
-        $('.row7').append('<td class="del"></td>')
-        flavors.forEach((flavor, index) => {
-            let row = index + 8
-            let x = workingRecipe[i].indexOf(flavor)
-            let value
-            if (x == -1) {
-                value = '-'
-            } else {
-                value = workingRecipe[i][x + 1]
-            }
-            $('.row' + row).append('<td class="del">' + value + '</td>')
+    await new Promise((resolve, reject) => {
+        fs.writeFile(address, recipe, (err) => {
+            resolve()
         })
+    })
+    updateRecipeList()
+}
+async function changeRecipeName(oldRecipeName, newRecipeName) {
+    if (recipeList.some(name => name == newRecipeName)) {
+        alert('Recipe name already exists, please choose another')
+        return false
     }
-    console.log('recipe data loaded')
+    let oAddress = './data/recipes/' + oldRecipeName + '.csv'
+    let nAddress = './data/recipes/' + newRecipeName + '.csv'
+    await new Promise((resolve, reject) => {
+        fs.rename(oAddress, nAddress, () => {
+            resolve()
+        })
+    })
+    workingRecipeName = newRecipeName
+    console.log('recipe name changed')
+    updateRecipeList()
 }
 updateRecipeList()
-
-
-//make recipes buttons work
