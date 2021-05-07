@@ -41,7 +41,7 @@ $('#calcAddFlavor').on('click', addFlavor)
 $('#calcRemoveFlavor').on('click', removeFlavor)
 $('#calcLoadRecipe').on('click', () => {
     let x = document.getElementById('calcRecipeName').value
-    if (x != '') loadRecipe(x)
+    if (x != '') loadRecipeCalc(x)
 })
 $('#calcSaveRecipe').on('click', () => {
     let x = document.getElementById('calcRecipeName').value
@@ -50,7 +50,7 @@ $('#calcSaveRecipe').on('click', () => {
 $('#calcRecipeName').on('keypress', (e) => {
     if (e.key === 'Enter') {
         let x = document.getElementById('calcRecipeName').value
-        if (x != '') loadRecipe(x)
+        if (x != '') loadRecipeCalc(x)
     }
 })
 function addFlavor() {
@@ -110,16 +110,11 @@ function addFlavor() {
 }
 function removeFlavor() {
     if (calcFlavorList.length > 0) {
-        //  remove flavor
         $('#calcNewFlavor' + calcFlavorCount).remove()
-        //  remove result flavor
         $('#calcResultFlavor' + calcFlavorCount).remove()
-        //  increment flavor count
         calcFlavorCount--
-        //  remove flavor from array
         calcFlavorList.length -= 1
         calcResultFlavorList.length -= 1
-        //  update calculator
         updateCalc()
     }
 }
@@ -217,50 +212,96 @@ parseCSV('./data/flavorDensity.csv', flavorDensityArray)
  */
 /** @type {Array<Array<String>>} */
 let workingRecipe = [[]]
+let workingRecipeName = ''
+let calcRecipe = [[]]
 let recipeList = []
 let recipeListHidden = false
 $('#recipeToggle').on('click', () => {
     if (recipeListHidden) {
-        $('#recipeList').children('ul').css('display', 'block')
-        $('#recipeList').css('width', '20%')
-        $('#recipeToggle').children('p').children('i').css('transform', 'rotate(135deg)')
-        $('#recipeToggle').children('p').css('margin-left', '6px')
+        $('#recipeList ul').css('display', 'block')
+        $('#recipeList').css('width', '250px')
+        $('#recipeToggle p i').css('transform', 'rotate(135deg)')
+        $('#recipeToggle p').css('left', '6px')
         $('#recipeToggle').css('border-left', '2px ridge rgb(140 140 140)')
-        $('#recipeView').css('width', '76%')
+        $('#recipeView').css('width', 'calc(100% - 260px)')
     } else {
-        $('#recipeList').children('ul').css('display', 'none')
-        $('#recipeList').css('width', '1.7%')
-        $('#recipeToggle').children('p').children('i').css('transform', 'rotate(-45deg)')
-        $('#recipeToggle').children('p').css('margin-left', '-1px')
+        $('#recipeList ul').css('display', 'none')
+        $('#recipeList').css('width', '28px')
+        $('#recipeToggle p i').css('transform', 'rotate(-45deg)')
+        $('#recipeToggle p').css('left', '1px')
         $('#recipeToggle').css('border-left', 'none')
-        $('#recipeView').css('width', '94%')
+        $('#recipeView').css('width', 'calc(100% - 38px)')
     }
     recipeListHidden = !recipeListHidden
 })
+$('#recipeChangeName').on('click', () => {
+    let newRecipeName = document.getElementById('recipeName').value
+    changeRecipeName(workingRecipeName, newRecipeName)
+})
+$('#recipeSave').on('click', () => {
+    let n = document.getElementById('recipeName').value
+    changeRecipe(n)
+})
+$('#recipeToCalc').on('click', () => {
+    loadRecipeCalc(workingRecipeName)
+    switchView('calc')
+})
 async function saveRecipe(recipeName) {
+    let version = 0
+    let calcRecipeName = calcRecipe[calcRecipe.length - 1][0]
+    if (recipeName == calcRecipeName) {
+        version = parseInt(calcRecipe[calcRecipe.length - 1][1]) + 1
+    } else {
+        if (recipeList.some(flavor => flavor == recipeName) ? true : false) {
+            if (confirm('Recipe already exists, would you like to add to it?')) {
+                importRecipe(recipeName, 'calc')
+                version = parseInt(calcRecipe[calcRecipe.length - 1][1]) + 1
+            } else {
+                return false
+            }
+        } else {
+            version = 1
+        }
+    }
+    let d = new Date()
+    let y = d.getFullYear() - 2000
+    let date = d.getMonth() + '/' + d.getDate() + '/' + y
+    let time = d.getHours() + ':' + d.getMinutes()
     let flavorCount = calcFlavorCount
-    for (i = 0; i < calcFlavorCount; i++) {
-        let fName = calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value
-        let fP = calcFlavorList[i].getElementsByClassName('calcNewFlavorP')[0].value
-        if (fName == fP) flavorCount--
-    }
-    let recipe = [calcAmmount.value, calcStrength.value, calcPG.value, calcVG.value, calcBaseStrength.value, calcBasePG.value, calcBaseVG.value, JSON.stringify(document.getElementById('calcCommentsBox').value), flavorCount]
+    let flavorList = [...calcFlavorList]
     for (i = 0; i < flavorCount; i++) {
-        recipe.push(calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value)
-        recipe.push(calcFlavorList[i].getElementsByClassName('calcNewFlavorP')[0].value)
+        let fName = flavorList[i].getElementsByClassName('calcNewFlavorName')[0].value
+        let fP = flavorList[i].getElementsByClassName('calcNewFlavorP')[0].value
+        if (fName == fP) {
+            flavorList.splice(i, 1)
+            flavorCount--
+            i--
+        } else if (fName == '') {
+            alert('Please enter a flavor name for flavor' + (i + 1))
+            return false
+        } else if (fP == '') {
+            alert('Please enter a flavor %')
+            return false
+        }
     }
+    let recipe = [recipeName, version, date, time, calcAmmount.value, calcStrength.value, calcPG.value, calcVG.value, calcBaseStrength.value, calcBasePG.value, calcBaseVG.value, JSON.stringify(document.getElementById('calcCommentsBox').value), flavorCount]
+    for (i = 0; i < flavorCount; i++) {
+        recipe.push(flavorList[i].getElementsByClassName('calcNewFlavorName')[0].value)
+        recipe.push(flavorList[i].getElementsByClassName('calcNewFlavorP')[0].value)
+    }
+    calcRecipe.push(recipe)
     recipe = recipe.join('|')
     recipe += '\n'
     let address = './data/recipes/' + recipeName + '.csv'
     await new Promise((resolve, reject) => {
-        fs.appendFile(address, recipe, (err) => {
+        fs.appendFile(address, recipe, () => {
             resolve()
         })
     })
     if (recipeList.some(flavor => flavor == recipeName) ? false : true) updateRecipeList()
     console.log("saved '" + recipeName + "'")
 }
-function importRecipe(recipeName) {
+function importRecipe(recipeName, destination) {
     let address = './data/recipes/' + recipeName + '.csv'
     return new Promise((resolve, reject) => {
         fs.readFile(address, (err, data) => {
@@ -271,28 +312,35 @@ function importRecipe(recipeName) {
             if (arr[arr.length - 1][0] == '') {
                 arr.length -= 1
             }
-            workingRecipe = arr
+            if (destination == 'calc') {
+                calcRecipe = arr
+            } else if (destination == 'recipes') {
+                workingRecipe = arr
+            } else {
+                console.log('Import failed')
+                return false
+            }
             console.log("imported '" + recipeName + "'")
             resolve()
         })
     })
 }
-async function loadRecipe(recipeName) {
+async function loadRecipeCalc(recipeName) {
     if (recipeList.some(flavor => flavor == recipeName) ? false : true) return false
-    await importRecipe(recipeName)
-    let arr = workingRecipe[workingRecipe.length - 1]
-    calcAmmount.value = arr[0]
-    calcStrength.value = arr[1]
-    calcPG.value = arr[2]
-    calcVG.value = arr[3]
-    calcBaseStrength.value = arr[4]
-    calcBasePG.value = arr[5]
-    calcBaseVG.value = arr[6]
-    document.getElementById('calcCommentsBox').value = JSON.parse(arr[7])
+    await importRecipe(recipeName, 'calc')
+    let arr = [...calcRecipe[calcRecipe.length - 1]]
+    calcAmmount.value = arr[4]
+    calcStrength.value = arr[5]
+    calcPG.value = arr[6]
+    calcVG.value = arr[7]
+    calcBaseStrength.value = arr[8]
+    calcBasePG.value = arr[9]
+    calcBaseVG.value = arr[10]
+    document.getElementById('calcCommentsBox').value = JSON.parse(arr[11])
     for (i = calcFlavorCount; i > -1; i--) {
         removeFlavor()
     }
-    for (i = 0, f = 9; i < parseInt(arr[8]); i++, f++) {
+    for (i = 0, f = 13; i < parseInt(arr[12]); i++, f++) {
         addFlavor()
         calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value = arr[f]
         f++
@@ -304,6 +352,50 @@ async function loadRecipe(recipeName) {
             calcFlavorList[i].getElementsByClassName('calcNewFlavorName')[0].value
     }
     console.log("loaded '" + recipeName + "'")
+}
+async function loadRecipeData(recipeName) {
+    await importRecipe(recipeName, 'recipes')
+    workingRecipeName = recipeName
+    let flavors = []
+    let versions = workingRecipe.length
+    for (i = 0; i < versions; i++) {
+        for (x = 13; x < workingRecipe[i].length; x += 2) {
+            let duplicate = flavors.some(flavor => flavor == workingRecipe[i][x])
+            if (!duplicate) {
+                flavors.push(workingRecipe[i][x])
+            }
+        }
+    }
+    $('.del').remove()
+    for (i = 0; i < flavors.length; i++) {
+        let row = i + 8
+        let newFlavor = $('<tr class="row' + row + ' del"></tr>').html('<td class="col1">' + flavors[i] + '</td>')
+        $('#recipeTableBody').append(newFlavor)
+    }
+    $('#recipeName').val(recipeName)
+    for (i = 0; i < versions; i++) {
+        $('.row1').append('<td class="del"><p>v' + workingRecipe[i][1] + '</p><p>' + workingRecipe[i][2] + '</p></td>')
+        $('.row1 td').last().children().first().css('float', 'left')
+        $('.row1 td').last().children().last().css('float', 'right')
+        $('.row2').append('<td class="del">' + workingRecipe[i][4] + '</td>')
+        $('.row3').append('<td class="del">' + workingRecipe[i][5] + '</td>')
+        $('.row4').append('<td class="del">' + workingRecipe[i][6] + '/' + workingRecipe[i][7] + '</td>')
+        $('.row5').append('<td class="del">' + workingRecipe[i][8] + '</td>')
+        $('.row6').append('<td class="del">' + workingRecipe[i][9] + '/' + workingRecipe[i][10] + '</td>')
+        $('.row7').append('<td class="del"></td>')
+        flavors.forEach((flavor, index) => {
+            let row = index + 8
+            let x = workingRecipe[i].indexOf(flavor)
+            let value
+            if (x == -1) {
+                value = '-'
+            } else {
+                value = workingRecipe[i][x + 1]
+            }
+            $('.row' + row).append('<td class="">' + value + '</td>')
+        })
+    }
+    console.log('recipe data loaded')
 }
 function importRecipeList() {
     return new Promise((resolve, reject) => {
@@ -318,16 +410,54 @@ function importRecipeList() {
 }
 async function updateRecipeList() {
     await importRecipeList()
-    $('#recipeList').children('ul').html = ''
+    $('#recipeList ul').html('')
     for (i = 0; i < recipeList.length; i++) {
         let recipe = recipeList[i]
         let newRecipe = $('<li></li>').text(recipe)
-        $('#recipeList').children('ul').append(newRecipe)
+        $('#recipeList ul').append(newRecipe)
         newRecipe.on('click', () => {
-            importRecipe(recipe)
-            $('#recipeData').html(recipe + ' placeholder')
+            loadRecipeData(recipe)
         })
     }
-    
+    console.log('recipe list updated')
+}
+async function changeRecipe(recipeName) {//overwrites file with any changes to working recipe OR creates new file if different name
+    let recipe = ''
+    let address = './data/recipes/' + recipeName + '.csv'
+    if (recipeName != workingRecipeName) {
+        if (recipeList.some(name => name == recipeName)) {
+            alert('Recipe name already exists, please choose another')
+            return false
+        }
+        if (!confirm('Recipe name has changed, this will create a new recipe with current history')) {
+            return false
+        }
+    }
+    for (i = 0; i < workingRecipe.length; i++) {
+        recipe += workingRecipe[i].join('|')
+        recipe += '\n'
+    }
+    await new Promise((resolve, reject) => {
+        fs.writeFile(address, recipe, (err) => {
+            resolve()
+        })
+    })
+    updateRecipeList()
+}
+async function changeRecipeName(oldRecipeName, newRecipeName) {
+    if (recipeList.some(name => name == newRecipeName)) {
+        alert('Recipe name already exists, please choose another')
+        return false
+    }
+    let oAddress = './data/recipes/' + oldRecipeName + '.csv'
+    let nAddress = './data/recipes/' + newRecipeName + '.csv'
+    await new Promise((resolve, reject) => {
+        fs.rename(oAddress, nAddress, () => {
+            resolve()
+        })
+    })
+    workingRecipeName = newRecipeName
+    console.log('recipe name changed')
+    updateRecipeList()
 }
 updateRecipeList()
