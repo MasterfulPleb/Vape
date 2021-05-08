@@ -41,7 +41,7 @@ $('#calcAddFlavor').on('click', addFlavor)
 $('#calcRemoveFlavor').on('click', removeFlavor)
 $('#calcLoadRecipe').on('click', () => {
     let x = document.getElementById('calcRecipeName').value
-    if (x != '') loadRecipeCalc(x)
+    x != '' ? loadRecipeCalc(x) : alert('No recipe name has been entered')
 })
 $('#calcSaveRecipe').on('click', () => {
     let x = document.getElementById('calcRecipeName').value
@@ -234,10 +234,6 @@ $('#recipeToggle').on('click', () => {
     }
     recipeListHidden = !recipeListHidden
 })
-$('#recipeChangeName').on('click', () => {
-    let newRecipeName = document.getElementById('recipeName').value
-    changeRecipeName(workingRecipeName, newRecipeName)
-})
 $('#recipeSave').on('click', () => {
     let n = document.getElementById('recipeName').value
     changeRecipe(n)
@@ -327,6 +323,7 @@ function importRecipe(recipeName, destination) {
 }
 async function loadRecipeCalc(recipeName) {
     if (recipeList.some(flavor => flavor == recipeName) ? false : true) return false
+    $('#calcRecipeName').val(recipeName)
     await importRecipe(recipeName, 'calc')
     let arr = [...calcRecipe[calcRecipe.length - 1]]
     calcAmmount.value = arr[4]
@@ -429,9 +426,9 @@ async function changeRecipe(recipeName) {//overwrites file with any changes to w
             alert('Recipe name already exists, please choose another')
             return false
         }
-        if (!confirm('Recipe name has changed, this will create a new recipe with current history')) {
-            return false
-        }
+        await changeRecipeName(workingRecipeName, recipeName)
+        workingRecipeName = recipeName
+        workingRecipe[workingRecipe.length - 1][0] = recipeName
     }
     for (i = 0; i < workingRecipe.length; i++) {
         recipe += workingRecipe[i].join('|')
@@ -445,10 +442,6 @@ async function changeRecipe(recipeName) {//overwrites file with any changes to w
     updateRecipeList()
 }
 async function changeRecipeName(oldRecipeName, newRecipeName) {
-    if (recipeList.some(name => name == newRecipeName)) {
-        alert('Recipe name already exists, please choose another')
-        return false
-    }
     let oAddress = './data/recipes/' + oldRecipeName + '.csv'
     let nAddress = './data/recipes/' + newRecipeName + '.csv'
     await new Promise((resolve, reject) => {
@@ -456,7 +449,6 @@ async function changeRecipeName(oldRecipeName, newRecipeName) {
             resolve()
         })
     })
-    workingRecipeName = newRecipeName
     console.log('recipe name changed')
     updateRecipeList()
 }
