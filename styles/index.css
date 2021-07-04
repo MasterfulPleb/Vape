@@ -1,29 +1,34 @@
 body {
+    margin: 0;
     background-color: rgb(41, 41, 41);
     color: rgb(220, 220, 220);
-    font-family: Arial;
     font-size: larger;
-    margin: 0;
-    padding: 0;
+    font-family: Arial;
 }
 #views {
-    overflow: auto
+    position: fixed;
+    top: 41px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    overflow: auto;
 }
 input {
-    font-size: large;
-    color: inherit;
     background-color: inherit;
+    color: inherit;
+    font-size: large;
 }
 textarea {
     resize: none;
-    font-family: inherit;
     font-size: large;
+    font-family: inherit;
 }
 button {
-    font-size: medium;
+    border: 2px outset;
     background-color: inherit;
     color: inherit;
-    border: 2px outset;
+    font-size: medium;
 }
 p {
     margin: 0px;
@@ -32,27 +37,26 @@ p {
 
 /*Menu Layout*/
 #menu {
-    list-style-type: none;
+    position: fixed;
+    width: 100%;
+    height: 41px;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: rgb(5, 124, 1);
+    list-style-type: none;
 }
 #menu li {
-    font-family: Arial;
-    font-size: large;
     display: inline-block;
-    color: white;
-    text-align: center;
     padding: 10px 15px;
-    cursor: default
+    color: white;
+    font-size: large;
+    text-align: center;
+    cursor: default;
 }
 #menu li:hover {
     background-color: rgb(2, 70, 0);
     color: rgb(207, 207, 207);
-}
-#recipes, #flavors, #batchHistory {
-    display: none
 }
 
 
@@ -78,8 +82,8 @@ p {
 }
 #calcComments {
     position: absolute;
-    height: 50%;
     width: 100%;
+    height: 50%;
 }
 #calcFlavors {
     position: relative;
@@ -96,7 +100,7 @@ table {
 td {
     padding-top: 20px;
 }
-.input {
+input {
     width: 55px;
 }
 .inputDescription {
@@ -104,9 +108,9 @@ td {
 }
 .calcNewFlavor {
     width: fit-content;
+    height: 45px;
     margin-left: auto;
     margin-right: auto;
-    height: 45px;
 }
 .calcNewFlavorName {
     float: left;
@@ -119,23 +123,22 @@ td {
     margin-right: 5px;
 }
 h4 {
-    text-align: center;
     margin: 43px 0px 23px;
+    text-align: center;
 }
 .calcNewFlavorSign {
     float: left;
     margin: 4px 0px;
 }
 #calcCommentsBox {
-    margin: 35px 0px 0px 10px;
     width: 95%;
     height: 80%;
-    color: inherit;
+    margin: 35px 0px 0px 10px;
     background-color: inherit;
+    color: inherit;
 }
-#calcChangeFlavors {
+#calcAddRemove {
     position: absolute;
-    top: 0px;
     width: 100%;
     margin-left: 10px;
     margin-top: 10px;
@@ -148,9 +151,9 @@ h4 {
 }
 .calcResultRow {
     width: fit-content;
+    height: 22px;
     margin-left: auto;
     margin-right: auto;
-    height: 22px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -170,17 +173,136 @@ h4 {
     text-align: right;
 }
 .calcResultMass {
-    float:left;
+    float: left;
     width: 60px;
-    text-align: right;
     margin-right: 30px;
+    text-align: right;
 }
 .calcResultPercent {
     float: left;
-    color: grey;
     width: 60px;
     overflow: hidden;
+    color: grey;
 }
 .calcResultRowEven {
     background-color: rgb(51, 51, 51);
+}
+.indicator {
+    height: 15px;
+    margin: 7px
+}
+#calcLoadSave {
+    position: absolute;
+    width: 100%;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+#calcRecipeName {
+    width: auto;
+}
+
+
+/*Recipes Layout*/
+#recipes {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+#recipeList {
+    position: relative;
+    float: left;
+    box-sizing: border-box;
+    width: 250px;
+    height: 100%;
+    border: 4px ridge rgb(140 140 140);
+}
+#recipeList ul {
+    float: left;
+    width: calc(100% - 22px);
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    list-style-type: none;
+}
+#recipeList ul li {
+    padding: 3px 10px;
+    cursor: default;
+}
+#recipeList ul li:nth-child(even) {
+    background-color: rgb(51, 51, 51);
+}
+#recipeList ul li:hover {
+    background-color: rgb(29 29 29);
+    color: rgb(160 160 160);
+}
+#recipeToggle {
+    position: relative;
+    float: right;
+    box-sizing: border-box;
+    width: 22px;
+    height: 100%;
+    border-left: 2px ridge rgb(140 140 140);
+}
+#recipeToggle:hover {
+    background-color: rgb(29 29 29);
+}
+#recipeToggle p {
+    position: absolute;
+    top: calc(50% - 11px);
+    left: 6px;
+}
+#recipeToggle p i {
+    display: inline-block;
+    padding: 5px;
+    border: solid;
+    border-color: rgb(140 140 140);
+    border-width: 0px 5px 5px 0;
+    transform: rotate(135deg);
+}
+#recipeView {
+    position: relative;
+    float: right;
+    box-sizing: border-box;
+    width: calc(100% - 260px);
+    height: 100%;
+}
+#recipeName {
+    width: auto;
+}
+#recipeData {
+    position: relative;
+    height: calc(100% - 52px);
+    margin-top: 25px;
+    overflow: auto;
+}
+#recipeTable {
+    margin: 0;
+    border-collapse: collapse;
+}
+#recipeTable tbody tr td {
+    min-width: 140px;
+    padding: 10px 5px;
+    text-align: right;
+}
+#recipeTable tbody tr:nth-child(even) {
+    background-color: rgb(58, 58, 58);
+}
+#recipeTable tbody tr td:nth-child(even) {
+    background-color: rgb(45, 45, 45);
+}
+#recipeTable tbody tr:nth-child(even) td:nth-child(even) {
+    background-color: rgb(53, 53, 53);
+}
+.col1 {
+    display: inline-block;
+    position: sticky;
+    left: 0;
+    width: min-content;
+    border-right: 2px solid grey;
+    background-color: rgb(41, 41, 41);
+}
+#recipeTable tbody tr:nth-child(even) td:first-child {
+    background-color: rgb(58, 58, 58);
 }

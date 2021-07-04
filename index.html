@@ -20,6 +20,11 @@
             <div id="calcTop">
                 <div id="calcLeft">
                     <div id="calcTopLeft">
+                        <div id="calcLoadSave">
+                            <button id="calcLoadRecipe">Load recipe</button>
+                            <button id="calcSaveRecipe">Save recipe</button>
+                            <input id="calcRecipeName" type="text" placeholder="Recipe Name">
+                        </div>
                         <div id="calcMix">
                             <table id="calcMixT">
                                 <tr>
@@ -27,22 +32,22 @@
                                 </tr>
                                 <tr>
                                     <td class="inputDescription">Ammount</td>
-                                    <td><input class="input" id="calcAmmount" type="number" step="10" min="0"></td>
+                                    <td><input id="calcAmmount" type="number" step="10" min="0"></td>
                                     <td>ml</td>
                                 </tr>
                                 <tr>
                                     <td class="inputDescription">Strength</td>
-                                    <td><input class="input" id="calcStrength" type="number" step=".5" min="0"></td>
+                                    <td><input id="calcStrength" type="number" step=".5" min="0"></td>
                                     <td>mg/ml</td>
                                 </tr>
                                 <tr>
                                     <td class="inputDescription">PG</td>
-                                    <td><input class="input" id="calcPG" type="number" step="1" min="0" max="100"></td>
+                                    <td><input id="calcPG" type="number" step="1" min="0" max="100"></td>
                                     <td>%</td>
                                 </tr>
                                 <tr>
                                     <td class="inputDescription">VG</td>
-                                    <td><input class="input" id="calcVG" type="number" step="1" min="0" max="100"></td>
+                                    <td><input id="calcVG" type="number" step="1" min="0" max="100"></td>
                                     <td>%</td>
                                 </tr>
                             </table>
@@ -54,17 +59,17 @@
                                 </tr>
                                 <tr>
                                     <td class="inputDescription">Strength</td>
-                                    <td><input  class="input" id="calcBaseStrength" type="number" step="1" min="0" value="100"></td>
+                                    <td><input id="calcBaseStrength" type="number" step="1" min="0" value="100"></td>
                                     <td>mg/ml</td>
                                 </tr>
                                 <tr>
                                     <td class="inputDescription">PG</td>
-                                    <td><input class="input" id="calcBasePG" type="number" step="100" min="0" max="100" value="0"></td>
+                                    <td><input id="calcBasePG" type="number" step="100" min="0" max="100" value="0"></td>
                                     <td>%</td>
                                 </tr>
                                 <tr>
                                     <td class="inputDescription">VG</td>
-                                    <td><input class="input" id="calcBaseVG" type="number" step="100" min="0" max="100" value="100"></td>
+                                    <td><input id="calcBaseVG" type="number" step="100" min="0" max="100" value="100"></td>
                                     <td>%</td>
                                 </tr>
                             </table>
@@ -75,9 +80,9 @@
                     </div>
                 </div>
                 <div id="calcFlavors">
-                    <div id="calcChangeFlavors">
-                        <button id="calcAddFlavor" onclick="addFlavor()">Add flavor</button>
-                        <button id="calcRemoveFlavor" onclick="removeFlavor()">Remove flavor</button>
+                    <div id="calcAddRemove">
+                        <button id="calcAddFlavor">Add flavor</button>
+                        <button id="calcRemoveFlavor">Remove flavor</button>
                     </div>
                     <h4>Flavors</h4>
                 </div>
@@ -111,7 +116,46 @@
         </div>
         <!--Recipes are here-->
         <div id="recipes">
-            Recipes
+            <div id="recipeList">
+                <ul></ul>
+                <div id="recipeToggle">
+                    <p><i></i></p>
+                </div>
+            </div>
+            <div id="recipeView">
+                <div id="recipeButtons">
+                    <input id="recipeName" type="text" placeholder="Recipe Name">
+                    <button id="recipeSave">Save changes</button>
+                    <button id="recipeToCalc">Open in calc</button>
+                </div>
+                <div id="recipeData">
+                    <table id="recipeTable">
+                        <tbody id="recipeTableBody">
+                            <tr class="row1">
+                                <td class="col1" style="display: list-item"></td>
+                            </tr>
+                            <tr class="row2">
+                                <td class="col1">Ammount</td>
+                            </tr>
+                            <tr class="row3">
+                                <td class="col1">Strength</td>
+                            </tr>
+                            <tr class="row4">
+                                <td class="col1">PG/VG</td>
+                            </tr>
+                            <tr class="row5">
+                                <td class="col1">Base Strength</td>
+                            </tr>
+                            <tr class="row6">
+                                <td class="col1">Base PG/VG</td>
+                            </tr>
+                            <tr class="row7">
+                                <td class="col1" style="display: list-item; height: 7px"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <!--Flavors are here-->
         <div id="flavors">
@@ -122,6 +166,7 @@
             Batch History
         </div>
     </div>
+    <script>window.$ = window.jQuery = require("jquery")</script>
     <script src="./scripts/index.js"></script>
 </body>
 </html>
